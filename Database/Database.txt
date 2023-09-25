@@ -1,0 +1,398 @@
+USE [POS]
+GO
+/****** Object:  Table [dbo].[t_Account]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_Account](
+	[accountID] [int] IDENTITY(1000,1000) NOT NULL,
+	[accountName] [nvarchar](120) NOT NULL,
+	[deposit] [decimal](18, 0) NULL,
+	[allTimeBalance] [decimal](18, 0) NULL,
+	[withdrawal] [decimal](18, 0) NULL,
+	[description] [varchar](max) NULL,
+	[clientID] [int] NULL,
+	[userDetailsID] [int] NOT NULL,
+	[DayAdded] [datetime] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[accountID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_Audit]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_Audit](
+	[auditD] [int] IDENTITY(1,1) NOT NULL,
+	[Action] [varchar](max) NOT NULL,
+	[userDetailsID] [int] NOT NULL,
+	[DayAdded] [datetime] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_Client]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_Client](
+	[clientID] [int] NOT NULL,
+	[clientFirstName] [nvarchar](60) NOT NULL,
+	[clientLastName] [nvarchar](60) NOT NULL,
+	[Country] [nvarchar](20) NOT NULL,
+	[Region] [nvarchar](20) NULL,
+	[clientPhone_Number] [nvarchar](20) NOT NULL,
+	[clientEmail] [nvarchar](120) NULL,
+	[DayAdded] [datetime] NOT NULL,
+	[AddedBy] [nvarchar](120) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[clientID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_Product_Category]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_Product_Category](
+	[CategoryID] [int] IDENTITY(1,1) NOT NULL,
+	[CategoryName] [nvarchar](120) NOT NULL,
+	[DayAdded] [datetime] NOT NULL,
+	[AddedBy] [nvarchar](120) NOT NULL,
+	[userDetailsID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[CategoryID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_Sales]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_Sales](
+	[productID] [int] NOT NULL,
+	[productName] [nvarchar](120) NOT NULL,
+	[productQuantity] [int] NOT NULL,
+	[totalPrice] [decimal](18, 0) NULL,
+	[userDetailsID] [int] NOT NULL,
+UNIQUE NONCLUSTERED 
+(
+	[productID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_Stock]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_Stock](
+	[productID] [int] IDENTITY(1,1) NOT NULL,
+	[productName] [nvarchar](120) NOT NULL,
+	[Man_Date] [datetime] NOT NULL,
+	[Exp_Date] [datetime] NOT NULL,
+	[DayAdded] [datetime] NOT NULL,
+	[stockAvailable] [int] NOT NULL,
+	[totalAmount] [decimal](18, 0) NOT NULL,
+	[PricePerUnit] [decimal](18, 0) NULL,
+	[AddedBy] [nvarchar](120) NOT NULL,
+	[supplierID] [int] NOT NULL,
+	[clientID] [int] NOT NULL,
+	[CategoryID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[productID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_Stock_Status]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_Stock_Status](
+	[stockStatusID] [int] IDENTITY(1,1) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[productID] [int] NOT NULL,
+	[userDetailsID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[stockStatusID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_Store]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_Store](
+	[productID] [int] NOT NULL,
+	[productName] [nvarchar](120) NOT NULL,
+	[Man_Date] [datetime] NOT NULL,
+	[Exp_Date] [datetime] NOT NULL,
+	[DayAdded] [datetime] NOT NULL,
+	[stockAvailable] [int] NOT NULL,
+	[PricePerUnit] [decimal](18, 0) NULL,
+	[AddedBy] [nvarchar](120) NOT NULL,
+	[stockStatusID] [int] NOT NULL,
+	[userDetailsID] [int] NOT NULL,
+UNIQUE NONCLUSTERED 
+(
+	[productID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_Supplier]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_Supplier](
+	[supplierID] [int] IDENTITY(1,1) NOT NULL,
+	[supplierName] [nvarchar](120) NOT NULL,
+	[supplierPhone_Number] [nvarchar](20) NOT NULL,
+	[supplierEmail] [nvarchar](120) NULL,
+	[DayAdded] [datetime] NOT NULL,
+	[AddedBy] [nvarchar](120) NOT NULL,
+	[userDetailsID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[supplierID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_SystemNotifications]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_SystemNotifications](
+	[messageID] [int] IDENTITY(1,1) NOT NULL,
+	[message] [varchar](max) NOT NULL,
+	[userDetailsID] [int] NOT NULL,
+	[DayAdded] [datetime] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_UserDetails]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_UserDetails](
+	[userDetailsID] [int] IDENTITY(1,1) NOT NULL,
+	[userName] [nvarchar](20) NOT NULL,
+	[email] [nvarchar](120) NULL,
+	[password] [varchar](max) NOT NULL,
+	[registrationID] [int] NOT NULL,
+	[userTypeID] [int] NOT NULL,
+	[userDetails_StatusID] [int] NOT NULL,
+	[DayAdded] [datetime] NOT NULL,
+	[AddedBy] [nvarchar](120) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[userDetailsID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_UserDetails_Status]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_UserDetails_Status](
+	[userDetails_StatusID] [int] IDENTITY(1,1) NOT NULL,
+	[isActive] [bit] NOT NULL,
+	[DayChanged] [datetime] NOT NULL,
+	[ChangedBy] [nvarchar](120) NOT NULL,
+	[clientID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[userDetails_StatusID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_UserRegistrationDetails]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_UserRegistrationDetails](
+	[registrationID] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [nvarchar](60) NOT NULL,
+	[LastName] [nvarchar](60) NOT NULL,
+	[Identification] [nvarchar](120) NOT NULL,
+	[Country] [nvarchar](20) NOT NULL,
+	[Region] [nvarchar](20) NULL,
+	[clientPhone_Number] [nvarchar](20) NOT NULL,
+	[clientEmail] [nvarchar](120) NULL,
+	[DayAdded] [datetime] NOT NULL,
+	[AddedBy] [nvarchar](120) NOT NULL,
+	[clientID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[registrationID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_UserType]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_UserType](
+	[userTypeID] [int] IDENTITY(1,1) NOT NULL,
+	[clientID] [int] NOT NULL,
+	[clientTypeName] [nvarchar](20) NOT NULL,
+	[userTypeStatusID] [int] NOT NULL,
+	[DayAdded] [datetime] NOT NULL,
+	[AddedBy] [nvarchar](120) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[userTypeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[t_UserType_Status]    Script Date: 25/Sep/2023 12:07:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[t_UserType_Status](
+	[userTypeStatusID] [int] IDENTITY(1,1) NOT NULL,
+	[userTypeStatusName] [nvarchar](20) NOT NULL,
+	[canAdd] [bit] NOT NULL,
+	[canView] [bit] NOT NULL,
+	[canEdit] [bit] NOT NULL,
+	[canDelete] [bit] NOT NULL,
+	[DayChanged] [datetime] NOT NULL,
+	[ChangedBy] [nvarchar](120) NOT NULL,
+	[clientID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[userTypeStatusID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[t_Account]  WITH CHECK ADD  CONSTRAINT [fk_t_Client_and_t_Account] FOREIGN KEY([clientID])
+REFERENCES [dbo].[t_Client] ([clientID])
+GO
+ALTER TABLE [dbo].[t_Account] CHECK CONSTRAINT [fk_t_Client_and_t_Account]
+GO
+ALTER TABLE [dbo].[t_Account]  WITH CHECK ADD  CONSTRAINT [fk_t_UserDetails_and_t_Account] FOREIGN KEY([userDetailsID])
+REFERENCES [dbo].[t_UserDetails] ([userDetailsID])
+GO
+ALTER TABLE [dbo].[t_Account] CHECK CONSTRAINT [fk_t_UserDetails_and_t_Account]
+GO
+ALTER TABLE [dbo].[t_Audit]  WITH CHECK ADD  CONSTRAINT [fk_t_UserDetails_and_t_Audit] FOREIGN KEY([userDetailsID])
+REFERENCES [dbo].[t_UserDetails] ([userDetailsID])
+GO
+ALTER TABLE [dbo].[t_Audit] CHECK CONSTRAINT [fk_t_UserDetails_and_t_Audit]
+GO
+ALTER TABLE [dbo].[t_Product_Category]  WITH CHECK ADD  CONSTRAINT [fk_t_UserDetails_and_t_Product_Category] FOREIGN KEY([userDetailsID])
+REFERENCES [dbo].[t_UserDetails] ([userDetailsID])
+GO
+ALTER TABLE [dbo].[t_Product_Category] CHECK CONSTRAINT [fk_t_UserDetails_and_t_Product_Category]
+GO
+ALTER TABLE [dbo].[t_Sales]  WITH CHECK ADD  CONSTRAINT [fk_t_Stock_and_t_Sales] FOREIGN KEY([productID])
+REFERENCES [dbo].[t_Stock] ([productID])
+GO
+ALTER TABLE [dbo].[t_Sales] CHECK CONSTRAINT [fk_t_Stock_and_t_Sales]
+GO
+ALTER TABLE [dbo].[t_Sales]  WITH CHECK ADD  CONSTRAINT [fk_t_UserDetails_and_t_Sales] FOREIGN KEY([userDetailsID])
+REFERENCES [dbo].[t_UserDetails] ([userDetailsID])
+GO
+ALTER TABLE [dbo].[t_Sales] CHECK CONSTRAINT [fk_t_UserDetails_and_t_Sales]
+GO
+ALTER TABLE [dbo].[t_Stock]  WITH CHECK ADD  CONSTRAINT [fk_t_Client_and_t_Stock] FOREIGN KEY([clientID])
+REFERENCES [dbo].[t_Client] ([clientID])
+GO
+ALTER TABLE [dbo].[t_Stock] CHECK CONSTRAINT [fk_t_Client_and_t_Stock]
+GO
+ALTER TABLE [dbo].[t_Stock]  WITH CHECK ADD  CONSTRAINT [fk_t_Product_Category_and_t_Stock] FOREIGN KEY([CategoryID])
+REFERENCES [dbo].[t_Product_Category] ([CategoryID])
+GO
+ALTER TABLE [dbo].[t_Stock] CHECK CONSTRAINT [fk_t_Product_Category_and_t_Stock]
+GO
+ALTER TABLE [dbo].[t_Stock]  WITH CHECK ADD  CONSTRAINT [fk_t_Supplier_and_t_Stock] FOREIGN KEY([supplierID])
+REFERENCES [dbo].[t_Supplier] ([supplierID])
+GO
+ALTER TABLE [dbo].[t_Stock] CHECK CONSTRAINT [fk_t_Supplier_and_t_Stock]
+GO
+ALTER TABLE [dbo].[t_Stock_Status]  WITH CHECK ADD  CONSTRAINT [fk_t_Stock_and_t_Stock_Status] FOREIGN KEY([productID])
+REFERENCES [dbo].[t_Stock] ([productID])
+GO
+ALTER TABLE [dbo].[t_Stock_Status] CHECK CONSTRAINT [fk_t_Stock_and_t_Stock_Status]
+GO
+ALTER TABLE [dbo].[t_Stock_Status]  WITH CHECK ADD  CONSTRAINT [fk_t_UserDetails_and_t_Stock_Status] FOREIGN KEY([userDetailsID])
+REFERENCES [dbo].[t_UserDetails] ([userDetailsID])
+GO
+ALTER TABLE [dbo].[t_Stock_Status] CHECK CONSTRAINT [fk_t_UserDetails_and_t_Stock_Status]
+GO
+ALTER TABLE [dbo].[t_Store]  WITH CHECK ADD  CONSTRAINT [fk_t_Stock_and_t_Store] FOREIGN KEY([productID])
+REFERENCES [dbo].[t_Stock] ([productID])
+GO
+ALTER TABLE [dbo].[t_Store] CHECK CONSTRAINT [fk_t_Stock_and_t_Store]
+GO
+ALTER TABLE [dbo].[t_Store]  WITH CHECK ADD  CONSTRAINT [fk_t_Stock_Status_and_t_Store] FOREIGN KEY([stockStatusID])
+REFERENCES [dbo].[t_Stock_Status] ([stockStatusID])
+GO
+ALTER TABLE [dbo].[t_Store] CHECK CONSTRAINT [fk_t_Stock_Status_and_t_Store]
+GO
+ALTER TABLE [dbo].[t_Store]  WITH CHECK ADD  CONSTRAINT [fk_t_UserDetails_and_t_Store] FOREIGN KEY([userDetailsID])
+REFERENCES [dbo].[t_UserDetails] ([userDetailsID])
+GO
+ALTER TABLE [dbo].[t_Store] CHECK CONSTRAINT [fk_t_UserDetails_and_t_Store]
+GO
+ALTER TABLE [dbo].[t_Supplier]  WITH CHECK ADD  CONSTRAINT [fk_t_UserDetails_and_t_Supplier] FOREIGN KEY([userDetailsID])
+REFERENCES [dbo].[t_UserDetails] ([userDetailsID])
+GO
+ALTER TABLE [dbo].[t_Supplier] CHECK CONSTRAINT [fk_t_UserDetails_and_t_Supplier]
+GO
+ALTER TABLE [dbo].[t_SystemNotifications]  WITH CHECK ADD  CONSTRAINT [fk_t_UserDetails_and_t_SystemNotifications] FOREIGN KEY([userDetailsID])
+REFERENCES [dbo].[t_UserDetails] ([userDetailsID])
+GO
+ALTER TABLE [dbo].[t_SystemNotifications] CHECK CONSTRAINT [fk_t_UserDetails_and_t_SystemNotifications]
+GO
+ALTER TABLE [dbo].[t_UserDetails]  WITH CHECK ADD  CONSTRAINT [fk_t_UserDetails_Status_and_t_UserDetails] FOREIGN KEY([userDetails_StatusID])
+REFERENCES [dbo].[t_UserDetails_Status] ([userDetails_StatusID])
+GO
+ALTER TABLE [dbo].[t_UserDetails] CHECK CONSTRAINT [fk_t_UserDetails_Status_and_t_UserDetails]
+GO
+ALTER TABLE [dbo].[t_UserDetails]  WITH CHECK ADD  CONSTRAINT [fk_t_UserRegistrationDetails_and_t_UserDetails] FOREIGN KEY([registrationID])
+REFERENCES [dbo].[t_UserRegistrationDetails] ([registrationID])
+GO
+ALTER TABLE [dbo].[t_UserDetails] CHECK CONSTRAINT [fk_t_UserRegistrationDetails_and_t_UserDetails]
+GO
+ALTER TABLE [dbo].[t_UserDetails]  WITH CHECK ADD  CONSTRAINT [FK_UserDetails_UserType] FOREIGN KEY([userTypeID])
+REFERENCES [dbo].[t_UserType] ([userTypeID])
+GO
+ALTER TABLE [dbo].[t_UserDetails] CHECK CONSTRAINT [FK_UserDetails_UserType]
+GO
+ALTER TABLE [dbo].[t_UserDetails_Status]  WITH CHECK ADD  CONSTRAINT [fk_t_UserDetails_Status_and_t_Client] FOREIGN KEY([clientID])
+REFERENCES [dbo].[t_Client] ([clientID])
+GO
+ALTER TABLE [dbo].[t_UserDetails_Status] CHECK CONSTRAINT [fk_t_UserDetails_Status_and_t_Client]
+GO
+ALTER TABLE [dbo].[t_UserRegistrationDetails]  WITH CHECK ADD  CONSTRAINT [fk_t_Client_and_t_UserRegistrationDetails] FOREIGN KEY([clientID])
+REFERENCES [dbo].[t_Client] ([clientID])
+GO
+ALTER TABLE [dbo].[t_UserRegistrationDetails] CHECK CONSTRAINT [fk_t_Client_and_t_UserRegistrationDetails]
+GO
+ALTER TABLE [dbo].[t_UserType]  WITH CHECK ADD  CONSTRAINT [fk_t_UserType_and_t_Client] FOREIGN KEY([clientID])
+REFERENCES [dbo].[t_Client] ([clientID])
+GO
+ALTER TABLE [dbo].[t_UserType] CHECK CONSTRAINT [fk_t_UserType_and_t_Client]
+GO
+ALTER TABLE [dbo].[t_UserType_Status]  WITH CHECK ADD  CONSTRAINT [fk_t_UserType_Status_and_t_UserType] FOREIGN KEY([clientID])
+REFERENCES [dbo].[t_Client] ([clientID])
+GO
+ALTER TABLE [dbo].[t_UserType_Status] CHECK CONSTRAINT [fk_t_UserType_Status_and_t_UserType]
+GO
